@@ -24,6 +24,16 @@ app.use(cookieParser());
 // Middleware de sessão
 app.use(sessionMiddleware);
 
+// Página inicial (após login ou cadastro)
+app.get('/', (req, res) => {
+    // Verifica se o usuário está autenticado (no caso de login)
+    if (req.session.user) {
+        res.redirect('/chat.html');
+    } else {
+        res.redirect('/cadastroUsuario.html');
+    }
+});
+
 // Configuração do motor de visualização EJS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
