@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bate-papo</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Bate-papo</h1>
+    <form action="/postarMensagem" method="POST">
+        <label for="usuario">Usuário:</label>
+        <select id="usuario" name="usuario" required>
+            <option value="">Selecione um usuário</option>
+            <% users.forEach(user => { %>
+                <option value="<%= user.nickname %>"><%= user.nome %></option>
+            <% }) %>
+        </select>
+
+        <label for="mensagem">Mensagem:</label>
+        <textarea id="mensagem" name="mensagem" rows="4" required></textarea>
+
+        <button type="submit">Enviar</button>
+    </form>
+
+    <% if (error) { %>
+        <p style="color: red; text-align: center;"><%= error %></p>
+    <% } %>
+
+    <h2>Mensagens</h2>
+    <ul>
+        <% messages.forEach(msg => { %>
+            <li>
+                <strong>[<%= new Date(msg.timestamp).toLocaleString() %>]</strong> 
+                <strong><%= msg.usuario %>:</strong> <%= msg.mensagem %>
+            </li>
+        <% }) %>
+    </ul>
+    <a href="/cadastroUsuario.html">Voltar para o cadastro</a>
+</body>
+</html>
