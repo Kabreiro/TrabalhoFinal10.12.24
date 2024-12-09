@@ -24,16 +24,6 @@ app.use(cookieParser());
 // Middleware de sessão
 app.use(sessionMiddleware);
 
-// Página inicial (após login ou cadastro)
-app.get('/', (req, res) => {
-    // Verifica se o usuário está autenticado (no caso de login)
-    if (req.session.user) {
-        res.redirect('/chat.html');
-    } else {
-        res.redirect('/cadastroUsuario.html');
-    }
-});
-
 // Configuração do motor de visualização EJS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -46,9 +36,14 @@ app.post('/cadastrarUsuario', userController.postCadastro);
 app.get('/chat.html', authMiddleware, chatController.getChat);
 app.post('/postarMensagem', authMiddleware, chatController.postMensagem);
 
-// Página inicial (redireciona para o cadastro de usuários)
+// Página inicial (após login ou cadastro)
 app.get('/', (req, res) => {
-    res.redirect('/cadastroUsuario.html');
+    // Verifica se o usuário está autenticado (no caso de login)
+    if (req.session.user) {
+        res.redirect('/chat.html');
+    } else {
+        res.redirect('/cadastroUsuario.html');
+    }
 });
 
 // Inicia o servidor
