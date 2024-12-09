@@ -36,6 +36,11 @@ app.post('/cadastrarUsuario', userController.postCadastro);
 app.get('/chat.html', authMiddleware, chatController.getChat);
 app.post('/postarMensagem', authMiddleware, chatController.postMensagem);
 
+// Rota protegida para exibir o bate-papo
+app.get('/chat.html', authMiddleware, (req, res) => {
+    res.render('chat'); // Renderiza o chat.ejs
+});
+
 // Página inicial (após login ou cadastro)
 app.get('/', (req, res) => {
     // Verifica se o usuário está autenticado (no caso de login)
