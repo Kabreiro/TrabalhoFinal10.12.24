@@ -7,3 +7,11 @@ function authMiddleware(req, res, next) {
 }
 
 module.exports = authMiddleware;
+
+module.exports = (req, res, next) => {
+    if (!req.session.user) {
+        // Se o usuário não estiver autenticado, redireciona para o login
+        return res.redirect('/cadastroUsuario.html');
+    }
+    next(); // Caso contrário, continua com a requisição
+};
