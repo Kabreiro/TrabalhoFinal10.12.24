@@ -12,7 +12,7 @@ const chatController = require('./controllers/chatController');
 
 // Inicialização do servidor
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000; // Usar a porta do Vercel ou 3000 localmente
 
 // Configuração de arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
