@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const sessionMiddleware = require('./middleware/sessionMiddleware');
 const authMiddleware = require('./middleware/authMiddleware');
 const userController = require('./controllers/userController');
@@ -14,6 +15,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(sessionMiddleware);
+// Configurando o middleware de sessão sem persistência
+app.use(session({
+    secret: 'seu_segredo_aqui',  // Defina um segredo seguro
+    resave: false,
+    saveUninitialized: true
+  }));
+  
+  // Rota principal
+  app.get('/', (req, res) => {
+    // Se a sessão não existe, cria uma
+    if (!req.session.views) {
+      req.session.views = 1;
+      return res.send('<p>Bem-vindo à sua primeira visita!</p>');
+    }
+  
+    // Incrementa o contador de visualizações a cada visita
+    req.session.views++;
+    res.send(`<p>Você visitou esta página ${req.session.views} vezes.</p>`);
+  });
 
 // Configuração do motor de visualização EJS
 app.set('view engine', 'ejs');
