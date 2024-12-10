@@ -2,14 +2,10 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 
-// Rota para o cadastro de usuário
-router.get('/cadastroUsuario.html', userController.getCadastro);
-router.post('/cadastrarUsuario', userController.postCadastro);
-
-// Rota para login
-router.post('/login', userController.login);
-
-// Rota para logout
-router.get('/logout', userController.logout);
+// Definindo as rotas do usuário
+router.get('/cadastroUsuario', userController.getCadastro); // Rota de exibição do cadastro
+router.post('/cadastrarUsuario', userController.postCadastro); // Rota para processar cadastro
+router.post('/login', userController.login); // Rota para login
+router.post('/logout', userController.logout); // Rota para logout
 
 module.exports = router;
