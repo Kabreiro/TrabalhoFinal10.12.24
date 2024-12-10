@@ -14,12 +14,6 @@ const chatController = require('./controllers/chatController');
 const app = express();
 const PORT = 3000;
 
-// Middleware para adicionar CSP aos cabeçalhos HTTP
-app.use((req, res, next) => {
-    res.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self' https://vercel.live;");
-    next(); // Continue com o processamento da requisição
-});
-
 // Configuração de arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -48,11 +42,10 @@ app.get('/', (req, res) => {
     return res.redirect('/cadastroUsuario.html'); // Caso contrário, redireciona para o cadastro
 });
 
-// Exportando a função serverless
+// Exportação da função para serverless (Vercel)
 module.exports = (req, res) => {
     app(req, res); // Chama o app Express como função
 };
-const cspMiddleware = require('../middleware/cspMiddleware');
 
 // Inicia o servidor
 app.listen(PORT, () => {
