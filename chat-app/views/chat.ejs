@@ -5,53 +5,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bate-papo</title>
     <link rel="stylesheet" href="/styles/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h1>Bate-papo</h1>
-    <form id="chat-form" action="/postarMensagem" method="POST">
-        <label for="usuario">Selecione um usuário:</label>
-        <select id="usuario" name="usuario" required>
-            <% usuarios.forEach(user => { %>
-                <option value="<%= user.nickname %>"><%= user.nickname %></option>
-            <% }) %>
-        </select>
+    <header>
+        <h1>Bate-papo</h1>
+    </header>
 
-        <label for="mensagem">Mensagem:</label>
-        <textarea id="mensagem" name="mensagem" placeholder="Digite sua mensagem..." required></textarea>
+    <main>
+        <!-- Formulário para enviar mensagens -->
+        <section id="form-section">
+            <h2>Enviar Mensagem</h2>
+            <form id="chat-form" action="/postarMensagem" method="POST">
+                <div class="form-group">
+                    <label for="usuario">Selecione um usuário:</label>
+                    <select id="usuario" name="usuario" required>
+                        <% usuarios.forEach(user => { %>
+                            <option value="<%= user.nickname %>"><%= user.nickname %></option>
+                        <% }) %>
+                    </select>
+                </div>
 
-        <button type="submit">Enviar Mensagem</button>
-    </form>
+                <div class="form-group">
+                    <label for="mensagem">Mensagem:</label>
+                    <textarea id="mensagem" name="mensagem" placeholder="Digite sua mensagem..." required></textarea>
+                </div>
 
-    <h2>Mensagens:</h2>
-<ul>
-    <% if (mensagens && mensagens.length > 0) { %>
-        <% mensagens.forEach(mensagem => { %>
-            <li>
-                <strong><%= mensagem.usuario %>:</strong>
-                <%= mensagem.texto %> - <%= mensagem.timestamp %>
-            </li>
-        <% }) %>
-    <% } else { %>
-        <li>Nenhuma mensagem para exibir.</li>
-    <% } %>
-</ul>
+                <button type="submit">Enviar Mensagem</button>
+            </form>
+        </section>
 
-<!-- Caixa de seleção para selecionar o usuário -->
-<form action="/enviarMensagem" method="POST">
-    <label for="usuario">Selecione o Usuário:</label>
-    <select id="usuario" name="usuario">
-        <option value="<%= usuarioLogado %>" selected><%= usuarioLogado %></option>
-        <% usuarios.forEach(usuario => { %>
-            <option value="<%= usuario.nickname %>"><%= usuario.nickname %></option>
-        <% }) %>
-    </select>
+        <!-- Lista de mensagens -->
+        <section id="messages-section">
+            <h2>Mensagens:</h2>
+            <ul id="messages-list">
+                <% if (mensagens && mensagens.length > 0) { %>
+                    <% mensagens.forEach(mensagem => { %>
+                        <li class="message-item">
+                            <strong><%= mensagem.usuario %>:</strong>
+                            <span><%= mensagem.texto %></span> - 
+                            <small><%= mensagem.timestamp %></small>
+                        </li>
+                    <% }) %>
+                <% } else { %>
+                    <li class="no-messages">Nenhuma mensagem para exibir.</li>
+                <% } %>
+            </ul>
+        </section>
+    </main>
 
-    <label for="mensagem">Mensagem:</label>
-    <textarea id="mensagem" name="mensagem"></textarea>
+    <footer>
+        <p>&copy; 2024 Bate-papo</p>
+    </footer>
 
-    <button type="submit">Enviar</button>
-</form>
+    <script>
+        // Envia a mensagem via AJAX
+        $('#chat-form').on('submit', function(e) {
+            e.preventDefault(); // Evita o envio do formulário padrão
 
+            // Coleta os dados do formulário
+            const usuario = $('#usuario').val();
+            const mensagem = $('#mensagem').val();
 
+            // Envia os dados para o servidor via AJAX
+            $.ajax({
+                url: '/postarMensagem',
+                method: 'POST',
+                data: { usuario, mensagem },
+                success: function(response) {
+                    // Adiciona a nova mensagem na lista
+                    $('#messages-list').append(`
+                        <li class="message-item">
+                            <strong>${usuario}:</strong>
+                            <span>${mensagem}</span> - 
+                            <small>${response.timestamp}</small>
+                        </li>
+                    `);
+
+                    // Limpa o campo de mensagem
+                    $('#mensagem').val('');
+                },
+                error: function() {
+                    alert('Erro ao enviar a mensagem.');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

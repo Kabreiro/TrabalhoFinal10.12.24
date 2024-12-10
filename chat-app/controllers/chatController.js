@@ -6,9 +6,6 @@ const chatController = {
             { nickname: 'Carol' }
         ]; // Substitua por dados reais, se possível
 
-        // Obter o usuário logado da sessão
-        const usuarioLogado = req.session.usuario;
-
         // Exemplo de mensagens para exibição na página
         const mensagens = [
             { usuario: 'Joao', texto: 'Oi, pessoal!', timestamp: '2024-12-10 10:00' },
@@ -16,7 +13,7 @@ const chatController = {
             { usuario: 'Carol', texto: 'Oi, Julio!', timestamp: '2024-12-10 10:03' }
         ];
 
-        res.render('chat', { usuarios, mensagens, usuarioLogado });
+        res.render('chat', { usuarios, mensagens });
     },
 
     postMensagem: (req, res) => {
@@ -27,11 +24,11 @@ const chatController = {
             return res.status(400).send('Usuário e mensagem são obrigatórios!');
         }
 
-        // Aqui você pode adicionar lógica para salvar mensagens em um banco de dados ou lista
+        // Adiciona a nova mensagem (aqui você poderia também salvar no banco de dados)
         const newMessage = { usuario, texto: mensagem, timestamp: new Date().toLocaleString() };
 
-        // Envia uma resposta de sucesso
-        res.status(200).send(`Mensagem enviada por ${usuario}: ${mensagem}`);
+        // Envia a nova mensagem como resposta para o AJAX
+        res.json({ usuario, texto: mensagem, timestamp: newMessage.timestamp });
     }
 };
 

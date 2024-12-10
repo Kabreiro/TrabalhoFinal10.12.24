@@ -2,8 +2,6 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const userRoutes = require('./routes/userRoutes');
-const chatRoutes = require('./routes/chatRoutes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -21,13 +19,20 @@ app.use(cookieParser());
 // Configuração de arquivos estáticos (CSS, JS, etc)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Usando as rotas de usuário e chat
-app.use(userRoutes); // Roteia as rotas de usuário
-app.use(chatRoutes); // Roteia as rotas de chat
+// Lista de mensagens (seria salva em banco de dados, mas aqui estamos armazenando na memória)
+let mensagens = [
+    { usuario: 'Joao', texto: 'Oi, pessoal!', timestamp: '2024-12-10 10:00' },
+    { usuario: 'Julio', texto: 'Olá, tudo bem?', timestamp: '2024-12-10 10:02' },
+    { usuario: 'Carol', texto: 'Oi, Julio!', timestamp: '2024-12-10 10:03' }
+];
 
-// Configuração do motor de visualização (EJS)
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+// Página inicial ou redirecionamento
+app.get('/', (req, res) => {
+    if (req.session.usuario) {
+        return res.redirect('/chat'); // Redireciona para o chat se o usuário estiver logado
+    }
+    res.redirect('/cadastroUsuario'); // Redireciona para a página de cadastro se não estiver logado
+});
 
 // Rota de cadastro de usuário
 app.get('/cadastroUsuario', (req, res) => {
@@ -55,23 +60,8 @@ app.post('/cadastroUsuario', (req, res) => {
     res.redirect('/chat');
 });
 
-// Página inicial ou redirecionamento
-app.get('/', (req, res) => {
-    if (req.session.usuario) {
-        return res.redirect('/chat'); // Redireciona para o chat se o usuário estiver logado
-    }
-    res.redirect('/cadastroUsuario'); // Redireciona para a página de cadastro se não estiver logado
-});
-
 // Rota de chat
 app.get('/chat', (req, res) => {
-    const mensagens = [
-        { usuario: 'Joao', texto: 'Oi, pessoal!', timestamp: '2024-12-10 10:00' },
-        { usuario: 'Julio', texto: 'Olá, tudo bem?', timestamp: '2024-12-10 10:02' },
-        { usuario: 'Carol', texto: 'Oi, Julio!', timestamp: '2024-12-10 10:03' }
-    ];
-
-    // Obter o usuário logado da sessão
     const usuarioLogado = req.session.usuario;
 
     res.render('chat', { mensagens, usuarioLogado });
@@ -85,10 +75,12 @@ app.post('/enviarMensagem', (req, res) => {
         return res.status(400).send('Usuário e mensagem são obrigatórios!');
     }
 
+    // Adicionar a nova mensagem à lista
     const newMessage = { usuario, texto: mensagem, timestamp: new Date().toLocaleString() };
+    mensagens.push(newMessage); // Adiciona à lista de mensagens
 
-    // Envia uma resposta de sucesso
-    res.status(200).send(`Mensagem enviada por ${usuario}: ${mensagem}`);
+    // Redirecionar de volta para o chat, exibindo as mensagens atualizadas
+    res.redirect('/chat');
 });
 
 // Inicializando o servidor
