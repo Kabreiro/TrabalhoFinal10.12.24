@@ -1,7 +1,9 @@
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://vercel.live;">
     <title>Cadastro de Usuário</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
@@ -20,16 +22,13 @@
         <button type="submit">Cadastrar</button>
     </form>
 
-    <% if (error) { %>
-        <p style="color: red; text-align: center;"><%= error %></p>
-    <% } %>
-
     <h2>Usuários Cadastrados</h2>
     <ul>
         <% users.forEach(user => { %>
             <li><strong><%= user.nome %></strong> (<%= user.nickname %>)</li>
         <% }) %>
     </ul>
+
     <a href="/chat.html">
         <button class="go-chat-btn">Ir para o Bate-papo</button>
     </a>

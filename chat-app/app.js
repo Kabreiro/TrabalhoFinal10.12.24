@@ -14,6 +14,12 @@ const chatController = require('./controllers/chatController');
 const app = express();
 const PORT = 3000;
 
+// Middleware para adicionar CSP aos cabeçalhos HTTP
+app.use((req, res, next) => {
+    res.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self' https://vercel.live;");
+    next(); // Continue com o processamento da requisição
+});
+
 // Configuração de arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -28,11 +34,9 @@ app.use(sessionMiddleware);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Rotas públicas
+// Definição das rotas
 app.get('/cadastroUsuario.html', userController.getCadastro);
 app.post('/cadastrarUsuario', userController.postCadastro);
-
-// Rotas protegidas (requer autenticação)
 app.get('/chat.html', authMiddleware, chatController.getChat);
 app.post('/postarMensagem', authMiddleware, chatController.postMensagem);
 
