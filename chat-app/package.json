@@ -2,7 +2,7 @@
   "name": "my-app",
   "version": "1.0.0",
   "description": "A simple Express app for Vercel",
-  "main": "app.js",  // ou server.js, conforme seu arquivo
+  "main": "app.js", 
   "scripts": {
     "start": "node app.js"
   },
