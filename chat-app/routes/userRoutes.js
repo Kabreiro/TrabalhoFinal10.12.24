@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router(); // Cria a instância do roteador
 const userController = require('../controllers/userController'); // Certifique-se de que o caminho está correto
-
+    
 // Defina suas rotas
 router.get('/cadastroUsuario', userController.getCadastro); // Rota para o cadastro
 router.post('/cadastrarUsuario', userController.postCadastro); // Rota para criar usuário
