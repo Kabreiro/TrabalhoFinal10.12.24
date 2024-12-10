@@ -1,9 +1,9 @@
 const chatController = {
     getChat: (req, res) => {
         const usuarios = [
-            { nickname: 'User1' },
-            { nickname: 'User2' },
-            { nickname: 'User3' }
+            { nickname: 'Joao' },
+            { nickname: 'Julio' },
+            { nickname: 'Carol' }
         ]; // Substitua por dados reais, se possível
 
         res.render('chat', { usuarios });

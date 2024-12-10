@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const chatController = require('../controllers/chatController');
-const authMiddleware = require('../middleware/authMiddleware'); // Middleware de autenticação
 
-// Rota de exibição do chat
-router.get('/chat', authMiddleware, chatController.getChat);
+// Rota para exibir a página de bate-papo
+router.get('/chat', chatController.getChat);
 
-// Rota para enviar mensagens no chat
-router.post('/postarMensagem', authMiddleware, chatController.postMensagem);
+// Rota para postar uma mensagem
+router.post('/postarMensagem', chatController.postMensagem);
 
 module.exports = router;
