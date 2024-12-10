@@ -25,6 +25,14 @@ app.post('/cadastrarUsuario', userController.postCadastro);
 app.get('/chat.html', authMiddleware, chatController.getChat);
 app.post('/postarMensagem', authMiddleware, chatController.postMensagem);
 
+// Importação das rotas
+const userRoutes = require('./routes/userRoutes');
+const chatRoutes = require('./routes/chatRoutes');
+
+// Usando as rotas no seu app
+app.use("/", userRoutes); // Certifique-se de que as rotas estão configuradas corretamente
+app.use("/", chatRoutes);
+
 // Página inicial (redireciona para o cadastro de usuários)
 app.get('/', (req, res) => {
     if (req.session.user) {
