@@ -1,26 +1,18 @@
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const session = require('express-session');
 
 // Importação de middlewares
 const sessionMiddleware = require('./middleware/sessionMiddleware');
 const authMiddleware = require('./middleware/authMiddleware');
-const cspMiddleware = require('./middleware/cspMiddleware'); // Adicione o middleware de CSP
 
 // Controladores
 const userController = require('./controllers/userController');
 const chatController = require('./controllers/chatController');
 
-// Inicialização do servidor Express
+// Inicialização do servidor
 const app = express();
-
-// Usar o middleware de CSP antes de qualquer outra configuração
-app.use(cspMiddleware);
-
-// Configuração do motor de visualização EJS
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+const PORT = 3000;
 
 // Configuração de arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
@@ -30,30 +22,26 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Middleware de sessão
-app.use(session({
-    secret: 'seu-segredo-aqui',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false } // Altere para 'true' se estiver usando HTTPS
-}));
+app.use(sessionMiddleware);
 
-// Rota de Cadastro de Usuário
+// Configuração do motor de visualização EJS
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Rotas públicas
 app.get('/cadastroUsuario.html', userController.getCadastro);
 app.post('/cadastrarUsuario', userController.postCadastro);
 
-// Rota de Bate-papo, protegida por autenticação
+// Rotas protegidas (requer autenticação)
 app.get('/chat.html', authMiddleware, chatController.getChat);
 app.post('/postarMensagem', authMiddleware, chatController.postMensagem);
 
-// Página inicial
+// Página inicial (redireciona para o cadastro de usuários)
 app.get('/', (req, res) => {
-    if (req.session.user) {
-        return res.redirect('/chat.html'); // Se autenticado, redireciona para o bate-papo
-    }
-    return res.redirect('/cadastroUsuario.html'); // Caso contrário, redireciona para o cadastro
+    res.redirect('/cadastroUsuario.html');
 });
 
-// Exportando a função serverless
-module.exports = (req, res) => {
-    app(req, res); // Chama o app Express como função
-};
+// Inicia o servidor
+app.listen(PORT, () => {
+    console.log(`Servidor rodando em http://localhost:${PORT}`);
+});
