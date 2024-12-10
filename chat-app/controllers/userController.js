@@ -1,29 +1,54 @@
-// controllers/userController.js
-const db = require('../config/db'); // Importando a conexão com o banco de dados
+const users = [
+    { id: 1, nickname: 'user1', password: '12345', name: 'João', email: 'joao@example.com' },
+    { id: 2, nickname: 'user2', password: '67890', name: 'Maria', email: 'maria@example.com' }
+];
 
-module.exports.getCadastro = (req, res) => {
-    if (req.session.user) {
-        return res.redirect('/chat.html');
-    }
-    res.render('cadastroUsuario');
-};
+const userController = {
+    getCadastro: (req, res) => {
+        // Renderiza a página de cadastro
+        res.render('cadastroUsuario');
+    },
 
-module.exports.postCadastro = (req, res) => {
-    const { nome, nascimento, nickname } = req.body;
+    postCadastro: (req, res) => {
+        const { nickname, password, name, email } = req.body;
 
-    if (!nome || !nascimento || !nickname) {
-        return res.status(400).send('Todos os campos são obrigatórios.');
-    }
+        // Simula a criação de um novo usuário
+        const newUser = { id: users.length + 1, nickname, password, name, email };
+        users.push(newUser);
 
-    // Consulta SQL para inserir o novo usuário no banco de dados
-    const query = 'INSERT INTO users (nome, nascimento, nickname) VALUES (?, ?, ?)';
-    db.query(query, [nome, nascimento, nickname], (err, result) => {
-        if (err) {
-            return res.status(500).send('Erro ao cadastrar o usuário');
+        // Armazena o ID do usuário na sessão e no cookie
+        req.session.userId = newUser.id;
+        res.cookie('userId', newUser.id, { maxAge: 900000, httpOnly: true });
+
+        res.status(201).send('Usuário criado com sucesso');
+    },
+
+    login: (req, res) => {
+        const { nickname, password } = req.body;
+
+        // Verifica se o usuário existe na lista e as credenciais
+        const user = users.find(u => u.nickname === nickname && u.password === password);
+
+        if (user) {
+            // Armazena o ID do usuário na sessão e no cookie
+            req.session.userId = user.id;
+            res.cookie('userId', user.id, { maxAge: 900000, httpOnly: true });
+            res.status(200).send('Login bem-sucedido');
+        } else {
+            res.status(401).send('Credenciais inválidas');
         }
+    },
 
-        // Salvando o usuário na sessão após cadastro
-        req.session.user = { nome, nickname, id: result.insertId };
-        res.redirect('/chat.html');
-    });
+    logout: (req, res) => {
+        // Limpa a sessão e o cookie
+        res.clearCookie('userId');
+        req.session.destroy((err) => {
+            if (err) {
+                return res.status(500).send('Erro ao destruir sessão');
+            }
+            res.status(200).send('Logout bem-sucedido');
+        });
+    }
 };
+
+module.exports = userController;
