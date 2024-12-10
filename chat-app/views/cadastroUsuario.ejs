@@ -7,57 +7,33 @@
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <header>
-        <h1>Cadastro de Usuário</h1>
-    </header>
+    <h1>Cadastro de Usuário</h1>
+    <form action="/cadastrarUsuario" method="POST">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
 
-    <main>
-        <!-- Formulário de cadastro -->
-        <section>
-            <form action="/cadastrarUsuario" method="POST">
-                <div>
-                    <label for="nome">Nome:</label>
-                    <input type="text" id="nome" name="nome" required>
-                </div>
+        <label for="nascimento">Data de Nascimento:</label>
+        <input type="date" id="nascimento" name="nascimento" required>
 
-                <div>
-                    <label for="nascimento">Data de Nascimento:</label>
-                    <input type="date" id="nascimento" name="nascimento" required>
-                </div>
+        <label for="nickname">Nickname:</label>
+        <input type="text" id="nickname" name="nickname" required>
 
-                <div>
-                    <label for="nickname">Nickname:</label>
-                    <input type="text" id="nickname" name="nickname" required>
-                </div>
+        <button type="submit">Cadastrar</button>
+    </form>
 
-                <button type="submit">Cadastrar</button>
-            </form>
-        </section>
+    <% if (users && users.length > 0) { %>
+        <h2>Usuários Cadastrados</h2>
+        <ul>
+            <% users.forEach(user => { %>
+                <li><strong><%= user.nome %></strong> (<%= user.nickname %>)</li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>Ainda não há usuários cadastrados.</p>
+    <% } %>
 
-        <!-- Exibição dos usuários cadastrados -->
-        <section>
-            <% if (users && users.length > 0) { %>
-                <h2>Usuários Cadastrados</h2>
-                <ul>
-                    <% users.forEach(user => { %>
-                        <li>
-                            <strong><%= user.nome %></strong> (<%= user.nickname %>)
-                        </li>
-                    <% }) %>
-                </ul>
-            <% } else { %>
-                <p>Ainda não há usuários cadastrados.</p>
-            <% } %>
-        </section>
-
-        <!-- Link para ir ao chat -->
-        <section>
-            <a href="/chat.html">
-                <button class="go-chat-btn">Ir para o Bate-papo</button>
-            </a>
-        </section>
-    </main>
-
-    <!-- Fim do corpo da página -->
+    <a href="/chat">
+        <button class="go-chat-btn">Ir para o Bate-papo</button>
+    </a>
 </body>
 </html>

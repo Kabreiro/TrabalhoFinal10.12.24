@@ -20,7 +20,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views')); // Certifique-se de que o caminho está correto
 
 // Definição das rotas
-app.get('/cadastroUsuario.html', userController.getCadastro);
+app.get('/cadastroUsuario', userController.getCadastro);
 app.post('/cadastrarUsuario', userController.postCadastro);
 app.get('/chat.html', authMiddleware, chatController.getChat);
 app.post('/postarMensagem', authMiddleware, chatController.postMensagem);
