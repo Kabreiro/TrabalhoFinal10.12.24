@@ -1,13 +1,19 @@
 module.exports.getCadastro = (req, res) => {
+    // Verifica se o usuário já está autenticado. Se estiver, redireciona para o chat.
     if (req.session.user) {
         return res.redirect('/chat.html');
     }
 
-    // Se você precisa passar uma variável 'users' para a view
-    const users = []; // Exemplo de dados; substitua com a lógica real para obter usuários
+    // Aqui, adicionei uma lista fictícia de usuários para exibir como exemplo
+    const users = [
+        { nome: 'João', nickname: 'joao123' },
+        { nome: 'Maria', nickname: 'maria_22' }
+    ];
 
-    res.render('cadastroUsuario', { users }); // Passando 'users' para o template
+    // Passando os usuários para a view
+    res.render('cadastroUsuario', { users });
 };
+
 
 module.exports.postCadastro = (req, res) => {
     // Validação dos dados de entrada
