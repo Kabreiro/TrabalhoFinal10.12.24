@@ -17,25 +17,22 @@ app.use(sessionMiddleware);
 
 // Configuração do motor de visualização EJS
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'views')); // Certifique-se de que o caminho está correto
 
-// Importação das rotas
-const userRoutes = require('./routes/userRoutes');
-const chatRoutes = require('./routes/chatRoutes');
+// Definição das rotas
+app.get('/cadastroUsuario', userController.getCadastro);
+app.post('/cadastrarUsuario', userController.postCadastro);
+app.get('/chat.html', authMiddleware, chatController.getChat);
+app.post('/postarMensagem', authMiddleware, chatController.postMensagem);
 
-// Usando as rotas no seu app
-app.use("/users", userRoutes); // Prefixo /users para rotas de usuários
-app.use("/chat", chatRoutes); // Prefixo /chat para rotas de chat
-
-// Página inicial (redireciona para o cadastro de usuários ou chat, conforme a sessão)
+// Página inicial (redireciona para o cadastro de usuários)
 app.get('/', (req, res) => {
     if (req.session.userId) {
-        return res.redirect('/chat'); // Redireciona para a página de chat
+        return res.redirect('/chat.html');
     }
-    return res.redirect('/users/cadastroUsuario'); // Redireciona para o cadastro de usuário
+    return res.redirect('/cadastroUsuario.html');
 });
 
-// Inicialização do servidor
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
