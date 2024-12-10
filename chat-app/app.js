@@ -1,18 +1,26 @@
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 // Importação de middlewares
 const sessionMiddleware = require('./middleware/sessionMiddleware');
 const authMiddleware = require('./middleware/authMiddleware');
+const cspMiddleware = require('./middleware/cspMiddleware'); // Adicione o middleware de CSP
 
 // Controladores
 const userController = require('./controllers/userController');
 const chatController = require('./controllers/chatController');
 
-// Inicialização do servidor
+// Inicialização do servidor Express
 const app = express();
-const PORT = process.env.PORT || 3000; // Usar a porta do Vercel ou 3000 localmente
+
+// Usar o middleware de CSP antes de qualquer outra configuração
+app.use(cspMiddleware);
+
+// Configuração do motor de visualização EJS
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 // Configuração de arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
@@ -22,37 +30,30 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Middleware de sessão
-app.use(sessionMiddleware);
+app.use(session({
+    secret: 'seu-segredo-aqui',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // Altere para 'true' se estiver usando HTTPS
+}));
 
-// Configuração do motor de visualização EJS
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
-// Rotas públicas
+// Rota de Cadastro de Usuário
 app.get('/cadastroUsuario.html', userController.getCadastro);
 app.post('/cadastrarUsuario', userController.postCadastro);
 
-// Rotas protegidas (requer autenticação)
+// Rota de Bate-papo, protegida por autenticação
 app.get('/chat.html', authMiddleware, chatController.getChat);
 app.post('/postarMensagem', authMiddleware, chatController.postMensagem);
 
-// Rota protegida para exibir o bate-papo
-app.get('/chat.html', authMiddleware, (req, res) => {
-    res.render('chat'); // Renderiza o chat.ejs
-});
-
-// Página inicial (após login ou cadastro)
+// Página inicial
 app.get('/', (req, res) => {
-    // Verifica se o usuário está autenticado (no caso de login)
     if (req.session.user) {
-        res.redirect('/chat.html');
-    } else {
-        res.redirect('/cadastroUsuario.html');
+        return res.redirect('/chat.html'); // Se autenticado, redireciona para o bate-papo
     }
+    return res.redirect('/cadastroUsuario.html'); // Caso contrário, redireciona para o cadastro
 });
 
-// Inicia o servidor
-app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
-
+// Exportando a função serverless
+module.exports = (req, res) => {
+    app(req, res); // Chama o app Express como função
+};
