@@ -1,3 +1,5 @@
+// api/index.js
+
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -30,7 +32,7 @@ app.use(session({
     secret: 'seu-segredo-aqui',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // Alterar para 'true' se for HTTPS
+    cookie: { secure: false } // Altere para 'true' se estiver usando HTTPS
 }));
 
 // Rota de Cadastro de Usuário
@@ -53,7 +55,6 @@ app.get('/', (req, res) => {
 module.exports = (req, res) => {
     app(req, res); // Chama o app Express como função
 };
-// Importando o middleware CSP
 const cspMiddleware = require('../middleware/cspMiddleware');
 
 // Aplicando o middleware CSP
