@@ -6,6 +6,9 @@ const chatController = {
             { nickname: 'Carol' }
         ]; // Substitua por dados reais, se possível
 
+        // Obter o usuário logado da sessão
+        const usuarioLogado = req.session.usuario;
+
         // Exemplo de mensagens para exibição na página
         const mensagens = [
             { usuario: 'Joao', texto: 'Oi, pessoal!', timestamp: '2024-12-10 10:00' },
@@ -13,7 +16,7 @@ const chatController = {
             { usuario: 'Carol', texto: 'Oi, Julio!', timestamp: '2024-12-10 10:03' }
         ];
 
-        res.render('chat', { usuarios, mensagens });
+        res.render('chat', { usuarios, mensagens, usuarioLogado });
     },
 
     postMensagem: (req, res) => {

@@ -36,5 +36,22 @@
     <% } %>
 </ul>
 
+<!-- Caixa de seleção para selecionar o usuário -->
+<form action="/enviarMensagem" method="POST">
+    <label for="usuario">Selecione o Usuário:</label>
+    <select id="usuario" name="usuario">
+        <option value="<%= usuarioLogado %>" selected><%= usuarioLogado %></option>
+        <% usuarios.forEach(usuario => { %>
+            <option value="<%= usuario.nickname %>"><%= usuario.nickname %></option>
+        <% }) %>
+    </select>
+
+    <label for="mensagem">Mensagem:</label>
+    <textarea id="mensagem" name="mensagem"></textarea>
+
+    <button type="submit">Enviar</button>
+</form>
+
+
 </body>
 </html>
