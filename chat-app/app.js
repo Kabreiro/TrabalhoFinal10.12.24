@@ -42,8 +42,17 @@ app.post('/postarMensagem', authMiddleware, chatController.postMensagem);
 
 // Página inicial (redireciona para o cadastro de usuários)
 app.get('/', (req, res) => {
-    res.redirect('/cadastroUsuario.html');
+    if (req.session.user) {
+        return res.redirect('/chat.html'); // Se autenticado, redireciona para o bate-papo
+    }
+    return res.redirect('/cadastroUsuario.html'); // Caso contrário, redireciona para o cadastro
 });
+
+// Exportando a função serverless
+module.exports = (req, res) => {
+    app(req, res); // Chama o app Express como função
+};
+const cspMiddleware = require('../middleware/cspMiddleware');
 
 // Inicia o servidor
 app.listen(PORT, () => {
