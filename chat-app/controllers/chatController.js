@@ -1,3 +1,5 @@
+// chatController.js
+
 const chatController = {
     getChat: (req, res) => {
         res.render('chat'); // Renderiza a página de chat

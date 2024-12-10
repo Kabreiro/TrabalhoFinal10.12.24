@@ -3,8 +3,7 @@ const router = express.Router();
 const chatController = require('../controllers/chatController');
 const authMiddleware = require('../middleware/authMiddleware');
 
-// Definindo as rotas de chat
-router.get('/chat', authMiddleware, chatController.getChat); // Rota de exibição do chat
-router.post('/postarMensagem', authMiddleware, chatController.postMensagem); // Rota para enviar mensagens
+router.get('/chat', authMiddleware, chatController.getChat); 
+router.post('/postarMensagem', authMiddleware, chatController.postMensagem); 
 
 module.exports = router;

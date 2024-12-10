@@ -36,7 +36,7 @@ app.get('/', (req, res) => {
     if (req.session.userId) {
         return res.redirect('/chat');
     }
-    res.redirect('/cadastroUsuario');
+    res.redirect('/cadastroUsuario'); // Redireciona para o cadastro se o usuário não estiver logado
 });
 
 app.listen(PORT, () => {
