@@ -46,8 +46,3 @@ app.get('/', (req, res) => {
 module.exports = (req, res) => {
     app(req, res); // Chama o app Express como função
 };
-
-// Inicia o servidor
-app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
