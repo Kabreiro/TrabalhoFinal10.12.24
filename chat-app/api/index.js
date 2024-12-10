@@ -49,5 +49,7 @@ app.get('/', (req, res) => {
     return res.redirect('/cadastroUsuario.html'); // Caso contrário, redireciona para o cadastro
 });
 
-// Exporta o aplicativo Express para ser usado pelo Vercel
-module.exports = app;
+// A função exportada do Vercel
+module.exports = (req, res) => {
+    app(req, res); // Chama o app Express no handler
+};
