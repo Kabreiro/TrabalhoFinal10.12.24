@@ -5,14 +5,23 @@ const cookieParser = require('cookie-parser');
 // Importação de middlewares
 const sessionMiddleware = require('./middleware/sessionMiddleware');
 const authMiddleware = require('./middleware/authMiddleware');
+const routes = require("./routes");
+app.use("/", routes);
+
 
 // Controladores
 const userController = require('./controllers/userController');
 const chatController = require('./controllers/chatController');
 
 // Inicialização do servidor
+const express = require("express");
 const app = express();
-const PORT = 3000;
+
+const PORT = process.env.PORT || 3000; // Porta definida pelo Vercel
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
+
 
 // Configuração de arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
@@ -25,8 +34,12 @@ app.use(cookieParser());
 app.use(sessionMiddleware);
 
 // Configuração do motor de visualização EJS
+app.set("views", "./views");
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+//Definicao para arquivos estaticos
+app.use(express.static("public"));
 
 // Definição das rotas
 app.get('/cadastroUsuario.html', userController.getCadastro);
