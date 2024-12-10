@@ -2,7 +2,11 @@ module.exports.getCadastro = (req, res) => {
     if (req.session.user) {
         return res.redirect('/chat.html');
     }
-    res.render('cadastroUsuario'); // Verifique se 'cadastroUsuario.ejs' existe em 'views/'
+
+    // Se você precisa passar uma variável 'users' para a view
+    const users = []; // Exemplo de dados; substitua com a lógica real para obter usuários
+
+    res.render('cadastroUsuario', { users }); // Passando 'users' para o template
 };
 
 module.exports.postCadastro = (req, res) => {
