@@ -6,11 +6,17 @@ const users = [
 const userController = {
     getCadastro: (req, res) => {
         // Renderiza a página de cadastro
-        res.render('cadastroUsuario');
+        res.render('cadastroUsuario'); // Verifique se 'cadastroUsuario' é o nome correto da página
     },
 
     postCadastro: (req, res) => {
         const { nickname, password, name, email } = req.body;
+
+        // Verifica se o usuário já existe
+        const existingUser = users.find(u => u.nickname === nickname || u.email === email);
+        if (existingUser) {
+            return res.status(400).send('Usuário ou e-mail já está cadastrado');
+        }
 
         // Simula a criação de um novo usuário
         const newUser = { id: users.length + 1, nickname, password, name, email };
@@ -20,7 +26,8 @@ const userController = {
         req.session.userId = newUser.id;
         res.cookie('userId', newUser.id, { maxAge: 900000, httpOnly: true });
 
-        res.status(201).send('Usuário criado com sucesso');
+        // Redireciona o usuário para a página de login ou para o chat
+        res.status(201).redirect('/login.html'); // Redireciona para o login
     },
 
     login: (req, res) => {
@@ -33,8 +40,11 @@ const userController = {
             // Armazena o ID do usuário na sessão e no cookie
             req.session.userId = user.id;
             res.cookie('userId', user.id, { maxAge: 900000, httpOnly: true });
-            res.status(200).send('Login bem-sucedido');
+
+            // Redireciona para a página do chat após login bem-sucedido
+            res.status(200).redirect('/chat.html');
         } else {
+            // Redireciona de volta para a página de login com uma mensagem de erro
             res.status(401).send('Credenciais inválidas');
         }
     },
@@ -46,7 +56,9 @@ const userController = {
             if (err) {
                 return res.status(500).send('Erro ao destruir sessão');
             }
-            res.status(200).send('Logout bem-sucedido');
+
+            // Redireciona para a página de login após logout
+            res.status(200).redirect('/login.html');
         });
     }
 };
