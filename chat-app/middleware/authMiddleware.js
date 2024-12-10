@@ -1,11 +1,7 @@
-// Middleware de autenticação
+// middleware/authMiddleware.js
 module.exports = (req, res, next) => {
-    // Verifica se o usuário está autenticado
-    if (!req.session.user || !req.session.user.name || !req.session.user.email) {
-        // Se não estiver autenticado, redireciona para a página de cadastro ou login
-        return res.redirect('/cadastroUsuario.html?error=auth_required');
+    if (!req.session.userId) {
+        return res.redirect('/login'); // Redireciona se o usuário não estiver autenticado
     }
-    
-    // Caso esteja autenticado, prossegue com a requisição
-    next();
+    next(); // Permite o acesso à rota
 };

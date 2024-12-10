@@ -1,4 +1,5 @@
-// userController.js
+// users.js - Simulando um banco de dados de usuários em memória
+let users = [];
 
 const userController = {
     getCadastro: (req, res) => {
