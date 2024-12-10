@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bate-papo</title>
     <link rel="stylesheet" href="/styles/styles.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <header>
@@ -16,7 +15,7 @@
         <!-- Formulário para enviar mensagens -->
         <section id="form-section">
             <h2>Enviar Mensagem</h2>
-            <form id="chat-form" action="/postarMensagem" method="POST">
+            <form id="chat-form" action="/enviarMensagem" method="POST">
                 <div class="form-group">
                     <label for="usuario">Selecione um usuário:</label>
                     <select id="usuario" name="usuario" required>
@@ -57,39 +56,5 @@
     <footer>
         <p>&copy; 2024 Bate-papo</p>
     </footer>
-
-    <script>
-        // Envia a mensagem via AJAX
-        $('#chat-form').on('submit', function(e) {
-            e.preventDefault(); // Evita o envio do formulário padrão
-
-            // Coleta os dados do formulário
-            const usuario = $('#usuario').val();
-            const mensagem = $('#mensagem').val();
-
-            // Envia os dados para o servidor via AJAX
-            $.ajax({
-                url: '/postarMensagem',
-                method: 'POST',
-                data: { usuario, mensagem },
-                success: function(response) {
-                    // Adiciona a nova mensagem na lista
-                    $('#messages-list').append(`
-                        <li class="message-item">
-                            <strong>${usuario}:</strong>
-                            <span>${mensagem}</span> - 
-                            <small>${response.timestamp}</small>
-                        </li>
-                    `);
-
-                    // Limpa o campo de mensagem
-                    $('#mensagem').val('');
-                },
-                error: function() {
-                    alert('Erro ao enviar a mensagem.');
-                }
-            });
-        });
-    </script>
 </body>
 </html>
