@@ -1,11 +1,8 @@
 module.exports.getCadastro = (req, res) => {
-    // Verifica se o usuário já está autenticado. Se estiver, redireciona para o chat.
     if (req.session.user) {
         return res.redirect('/chat.html');
     }
-
-    // Renderiza a página de cadastro, caso o usuário não esteja autenticado
-    res.render('cadastroUsuario');
+    res.render('cadastroUsuario'); // Verifique se 'cadastroUsuario.ejs' existe em 'views/'
 };
 
 module.exports.postCadastro = (req, res) => {
