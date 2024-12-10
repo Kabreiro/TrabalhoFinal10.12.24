@@ -1,8 +1,8 @@
 const authMiddleware = (req, res, next) => {
-    if (!req.session.userId) {
-        return res.redirect('/cadastroUsuario'); // Redireciona para a página de login ou cadastro se o usuário não estiver autenticado
+    if (req.session.userId) {
+        return next();  // Se o usuário estiver autenticado, permite continuar
     }
-    next(); // Se o usuário estiver autenticado, segue para a próxima função (rota de chat)
+    return res.redirect('/');  // Caso contrário, redireciona para a página inicial
 };
 
 module.exports = authMiddleware;

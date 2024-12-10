@@ -1,3 +1,4 @@
+/* Estilo Geral */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -11,6 +12,7 @@ h1, h2 {
     color: #333;
 }
 
+/* Formulários */
 form {
     max-width: 600px;
     margin: 20px auto;
@@ -52,7 +54,8 @@ button:hover {
     background-color: #0056b3;
 }
 
-.go-chat-btn {
+/* Botão personalizado para "Ir para o Bate-papo" */
+#go-chat-btn {
     display: block;
     margin: 20px auto;
     background-color: #28a745;
@@ -65,16 +68,41 @@ button:hover {
     transition: background-color 0.3s ease;
 }
 
-.go-chat-btn:hover {
+#go-chat-btn:hover {
     background-color: #218838;
 }
 
-input[type="text"]:focus, input[type="date"]:focus, textarea:focus, select:focus, button:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+/* Lista de usuários */
+ul {
+    max-width: 600px;
+    margin: 20px auto;
+    list-style-type: none;
+    padding: 0;
 }
 
+ul li {
+    background-color: #fff;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+ul li strong {
+    color: #007bff;
+}
+
+/* Mensagens do chat */
+h2 {
+    margin-top: 40px;
+}
+
+textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+/* Responsividade */
 @media (max-width: 600px) {
     form {
         padding: 15px;
@@ -85,7 +113,7 @@ input[type="text"]:focus, input[type="date"]:focus, textarea:focus, select:focus
         font-size: 14px;
     }
 
-    button, .go-chat-btn {
+    button, #go-chat-btn {
         width: 100%;
     }
 }

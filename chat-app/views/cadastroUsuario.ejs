@@ -1,15 +1,14 @@
-<!-- views/cadastroUsuario.ejs -->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Usuário</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/styles/styles.css">
 </head>
 <body>
     <h1>Cadastro de Usuário</h1>
-    <form action="/cadastrarUsuario" method="POST">
+    <form id="cadastro-form" action="/cadastrarUsuario" method="POST">
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" required>
 
@@ -22,10 +21,10 @@
         <button type="submit">Cadastrar</button>
     </form>
 
-    <h2>Usuários Cadastrados</h2>
     <% if (users && users.length > 0) { %>
+        <h2>Usuários Cadastrados</h2>
         <ul>
-            <% users.forEach(function(user) { %>
+            <% users.forEach(user => { %>
                 <li><strong><%= user.nome %></strong> (<%= user.nickname %>)</li>
             <% }) %>
         </ul>
@@ -34,7 +33,7 @@
     <% } %>
 
     <a href="/chat">
-        <button class="go-chat-btn">Ir para o Bate-papo</button>
+        <button id="go-chat-btn">Ir para o Bate-papo</button>
     </a>
 </body>
 </html>

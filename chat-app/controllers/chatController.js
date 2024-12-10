@@ -1,28 +1,27 @@
 const chatController = {
     getChat: (req, res) => {
-        const usuarios = req.app.locals.users || [];  // Lista de usuários cadastrados (salvo na memória ou banco de dados)
-        const mensagens = req.app.locals.mensagens || [];  // Mensagens enviadas no chat (salvo na memória ou banco de dados)
+        const usuarios = [
+            { nickname: 'User1' },
+            { nickname: 'User2' },
+            { nickname: 'User3' }
+        ]; // Substitua por dados reais, se possível
 
-        // Renderiza a página de chat passando usuários e mensagens
-        res.render('chat', { usuarios, mensagens });
+        res.render('chat', { usuarios });
     },
 
     postMensagem: (req, res) => {
-        const { usuario, mensagem } = req.body;  // Extrai o usuário e a mensagem do formulário
+        const { usuario, mensagem } = req.body;
+        
+        // Verificar se a mensagem está presente
+        if (!usuario || !mensagem) {
+            return res.status(400).send('Usuário e mensagem são obrigatórios!');
+        }
 
-        // Cria um objeto para a nova mensagem com um timestamp
-        const novaMensagem = {
-            usuario,
-            mensagem,
-            timestamp: new Date().toLocaleString(),  // Timestamp para mostrar a hora da mensagem
-        };
+        // Aqui você pode adicionar lógica para salvar mensagens em um banco de dados ou lista
+        const newMessage = { usuario, mensagem, timestamp: new Date() };
 
-        // Armazena a nova mensagem
-        req.app.locals.mensagens = req.app.locals.mensagens || [];
-        req.app.locals.mensagens.push(novaMensagem);
-
-        // Após o envio da mensagem, redireciona de volta para o chat
-        res.redirect('/chat');
+        // Envia uma resposta de sucesso
+        res.status(200).send(`Mensagem enviada por ${usuario}: ${mensagem}`);
     }
 };
 
