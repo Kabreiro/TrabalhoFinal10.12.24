@@ -1,25 +1,21 @@
-const users = []; // Array para armazenar os usuários (em memória)
+// userController.js
+const usuarios = []; // Armazenando usuários na memória (poderia ser um banco de dados)
 
 exports.getCadastro = (req, res) => {
-    const error = req.query.error || null; // Captura mensagens de erro, se houver
-    res.render('cadastroUsuario', { users, error });
+    res.render('cadastroUsuario', { error: null });
 };
 
 exports.postCadastro = (req, res) => {
-    const { nome, nascimento, nickname } = req.body;
+    const { nome, email, senha, nickname } = req.body;
 
-    // Validação simples dos dados
-    if (!nome || !nascimento || !nickname) {
-        return res.redirect('/cadastroUsuario.html?error=Preencha todos os campos!');
+    // Validação de dados
+    if (!nome || !email || !senha || !nickname) {
+        return res.render('cadastroUsuario', { error: 'Todos os campos são obrigatórios' });
     }
 
-    // Verifica se o nickname já foi cadastrado
-    const userExists = users.some(user => user.nickname === nickname);
-    if (userExists) {
-        return res.redirect('/cadastroUsuario.html?error=Nickname já está em uso!');
-    }
+    // Adiciona o usuário à "base de dados"
+    usuarios.push({ nome, email, senha, nickname });
 
-    // Adiciona o usuário ao array
-    users.push({ nome, nascimento, nickname });
-    res.redirect('/cadastroUsuario.html');
+    // Redireciona para o menu de bate-papo
+    res.redirect('/');
 };

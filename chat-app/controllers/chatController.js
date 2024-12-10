@@ -1,24 +1,26 @@
-const messages = []; // Array para armazenar as mensagens (em memória)
+// chatController.js
+const mensagens = []; // Armazenando mensagens na memória (poderia ser um banco de dados)
+const usuarios = []; // A mesma "base de dados" dos usuários
 
 exports.getChat = (req, res) => {
-    const error = req.query.error || null; // Captura mensagens de erro, se houver
-    res.render('chat', { users, messages, error });
+    res.render('chat', { mensagens, usuarios });
 };
 
 exports.postMensagem = (req, res) => {
     const { usuario, mensagem } = req.body;
 
-    // Validação dos dados
-    if (!usuario || !mensagem.trim()) {
-        return res.redirect('/chat.html?error=Selecione um usuário e preencha a mensagem!');
+    // Valida se os campos estão preenchidos
+    if (!usuario || !mensagem) {
+        return res.render('chat', { mensagens, usuarios, error: 'Preencha todos os campos' });
     }
 
-    // Adiciona a mensagem ao array com data e hora
-    messages.push({
+    // Adiciona a mensagem à lista
+    mensagens.push({
         usuario,
-        mensagem,
-        timestamp: new Date(),
+        texto: mensagem,
+        data: new Date().toLocaleString(),
     });
 
-    res.redirect('/chat.html');
+    // Renderiza novamente o bate-papo com a mensagem nova
+    res.render('chat', { mensagens, usuarios });
 };

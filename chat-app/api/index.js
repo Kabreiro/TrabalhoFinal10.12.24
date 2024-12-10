@@ -11,6 +11,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 const userController = require('../controllers/userController');
 const chatController = require('../controllers/chatController');
 
+// Inicialização do servidor Express
 const app = express();
 
 // Configuração do motor de visualização EJS
@@ -25,23 +26,27 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Middleware de sessão
-app.use(sessionMiddleware);
+app.use(session({
+    secret: 'seu-segredo-aqui',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // Alterar para 'true' se usar HTTPS
+}));
 
-// Rotas públicas
+// Rota de Cadastro de Usuário
 app.get('/cadastroUsuario.html', userController.getCadastro);
 app.post('/cadastrarUsuario', userController.postCadastro);
 
-// Rotas protegidas (requer autenticação)
+// Rota de Bate-papo, protegida por autenticação
 app.get('/chat.html', authMiddleware, chatController.getChat);
 app.post('/postarMensagem', authMiddleware, chatController.postMensagem);
 
-// Página inicial (redireciona para o cadastro de usuários)
+// Página inicial
 app.get('/', (req, res) => {
     if (req.session.user) {
-        res.redirect('/chat.html');
-    } else {
-        res.redirect('/cadastroUsuario.html');
+        return res.redirect('/chat.html'); // Se autenticado, redireciona para o bate-papo
     }
+    return res.redirect('/cadastroUsuario.html'); // Caso contrário, redireciona para o cadastro
 });
 
 // Exporta o aplicativo Express para ser usado pelo Vercel
