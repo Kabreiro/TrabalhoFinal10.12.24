@@ -30,7 +30,7 @@ app.use(session({
     secret: 'seu-segredo-aqui',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // Alterar para 'true' se usar HTTPS
+    cookie: { secure: false } // Alterar para 'true' se for HTTPS
 }));
 
 // Rota de Cadastro de Usuário
@@ -49,7 +49,12 @@ app.get('/', (req, res) => {
     return res.redirect('/cadastroUsuario.html'); // Caso contrário, redireciona para o cadastro
 });
 
-// A função exportada do Vercel
+// Exportando a função serverless
 module.exports = (req, res) => {
-    app(req, res); // Chama o app Express no handler
+    app(req, res); // Chama o app Express como função
 };
+// Importando o middleware CSP
+const cspMiddleware = require('../middleware/cspMiddleware');
+
+// Aplicando o middleware CSP
+app.use(cspMiddleware);
