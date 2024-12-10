@@ -23,13 +23,18 @@
     </form>
 
     <h2>Mensagens:</h2>
-    <ul>
+<ul>
+    <% if (mensagens && mensagens.length > 0) { %>
         <% mensagens.forEach(mensagem => { %>
             <li>
                 <strong><%= mensagem.usuario %>:</strong>
                 <%= mensagem.texto %> - <%= mensagem.timestamp %>
             </li>
         <% }) %>
-    </ul>
+    <% } else { %>
+        <li>Nenhuma mensagem para exibir.</li>
+    <% } %>
+</ul>
+
 </body>
 </html>
