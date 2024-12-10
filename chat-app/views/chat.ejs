@@ -8,12 +8,16 @@
 </head>
 <body>
     <h1>Bem-vindo ao Bate-papo!</h1>
+    
+    <!-- Formulário para enviar mensagens -->
     <form action="/postarMensagem" method="POST">
+        <label for="usuario">Selecione seu usuário:</label>
         <select name="usuario" required>
             <% usuarios.forEach(function(usuario) { %>
                 <option value="<%= usuario.nickname %>"><%= usuario.nickname %></option>
             <% }); %>
         </select>
+        
         <textarea name="mensagem" placeholder="Digite sua mensagem..." required></textarea>
         <button type="submit">Enviar Mensagem</button>
     </form>

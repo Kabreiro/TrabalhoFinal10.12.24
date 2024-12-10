@@ -22,10 +22,10 @@
         <button type="submit">Cadastrar</button>
     </form>
 
+    <h2>Usuários Cadastrados</h2>
     <% if (users && users.length > 0) { %>
-        <h2>Usuários Cadastrados</h2>
         <ul>
-            <% users.forEach(user => { %>
+            <% users.forEach(function(user) { %>
                 <li><strong><%= user.nome %></strong> (<%= user.nickname %>)</li>
             <% }) %>
         </ul>
