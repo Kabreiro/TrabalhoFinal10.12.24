@@ -1,3 +1,4 @@
+// Importando as dependências necessárias
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -5,6 +6,9 @@ const sessionMiddleware = require('./middleware/sessionMiddleware');
 const authMiddleware = require('./middleware/authMiddleware');
 const userController = require('./controllers/userController');
 const chatController = require('./controllers/chatController');
+
+// Configuração do banco de dados MySQL
+const db = require('./config/db'); // Conexão com o banco de dados MySQL
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -41,6 +45,16 @@ app.get('/', (req, res) => {
     return res.redirect('/cadastroUsuario.html');
 });
 
+// Conexão com o banco de dados
+db.connect((err) => {
+    if (err) {
+        console.error('Erro ao conectar ao banco de dados:', err);
+        process.exit(1); // Se não conseguir conectar, o servidor vai encerrar
+    }
+    console.log('Conectado ao banco de dados MySQL');
+});
+
+// Inicializando o servidor
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });

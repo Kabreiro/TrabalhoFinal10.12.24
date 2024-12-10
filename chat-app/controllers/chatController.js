@@ -1,41 +1,34 @@
-module.exports.getChat = (req, res) => {
-    // Verifique se o usuário está autenticado
-    const usuarios = userModel.getUsers(); // Obtém os usuários
-    const mensagens = messageModel.getMessages(); // Obtém as mensagens
-    if (!req.session.user) {
-        return res.redirect('/cadastroUsuario.html'); // Redireciona caso o usuário não esteja autenticado
-    }
+// controllers/chatController.js
+const db = require('../config/db'); // Importando a conexão com o banco de dados
 
-    // Renderiza a página do chat, enviando o usuário logado para o EJS
-    res.render('chat', { user: req.session.user });
+module.exports.getChat = (req, res) => {
+    // Consulta para obter todas as mensagens e informações dos usuários
+    const query = 'SELECT m.message, m.timestamp, u.nome, u.nickname FROM messages m JOIN users u ON m.user_id = u.id ORDER BY m.timestamp DESC';
+    db.query(query, (err, results) => {
+        if (err) {
+            return res.status(500).send('Erro ao carregar as mensagens');
+        }
+
+        // Renderizando a página de chat com as mensagens
+        res.render('chat', { messages: results });
+    });
 };
 
 module.exports.postMensagem = (req, res) => {
-    // Verifique se o usuário está autenticado antes de permitir o envio de mensagens
-    if (!req.session.user) {
-        return res.status(401).send('Você precisa estar autenticado para enviar mensagens.');
-    }
-    res.redirect('/chat.html');
-    // Lógica para salvar ou processar a mensagem
-    const mensagem = req.body.message;
-    
-    // Verifique se a mensagem foi fornecida
-    if (!mensagem || mensagem.trim() === '') {
+    const { message } = req.body;
+    const userId = req.session.user.id; // Obtendo o ID do usuário da sessão
+
+    if (!message) {
         return res.status(400).send('A mensagem não pode ser vazia.');
     }
 
-    // Aqui você pode adicionar a lógica de salvar a mensagem, como em um banco de dados.
-    // Como exemplo, vamos armazenar a mensagem na sessão (apenas como exemplo temporário).
-    if (!req.session.messages) {
-        req.session.messages = []; // Inicializa o array de mensagens se não existir
-    }
+    // Consulta SQL para inserir a nova mensagem
+    const query = 'INSERT INTO messages (user_id, message) VALUES (?, ?)';
+    db.query(query, [userId, message], (err, result) => {
+        if (err) {
+            return res.status(500).send('Erro ao postar a mensagem');
+        }
 
-    req.session.messages.push({
-        user: req.session.user.name, // Nome do usuário que enviou a mensagem
-        message: mensagem,
-        timestamp: new Date() // Armazena a data e hora da mensagem
+        res.redirect('/chat.html'); // Redireciona para o chat após postar a mensagem
     });
-
-    // Envie uma resposta de sucesso
-    res.send('Mensagem enviada com sucesso!');
 };

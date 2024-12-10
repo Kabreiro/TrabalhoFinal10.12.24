@@ -1,37 +1,29 @@
+// controllers/userController.js
+const db = require('../config/db'); // Importando a conexão com o banco de dados
+
 module.exports.getCadastro = (req, res) => {
-    // Verifica se o usuário já está autenticado. Se estiver, redireciona para o chat.
     if (req.session.user) {
         return res.redirect('/chat.html');
     }
-
-    // Aqui, adicionei uma lista fictícia de usuários para exibir como exemplo
-    const users = [
-        { nome: 'João', nickname: 'joao123' },
-        { nome: 'Maria', nickname: 'maria_22' }
-    ];
-
-    // Passando os usuários para a view
-    res.render('cadastroUsuario', { users });
+    res.render('cadastroUsuario');
 };
 
-
 module.exports.postCadastro = (req, res) => {
-    // Validação dos dados de entrada
-    const { name, email, password } = req.body;
+    const { nome, nascimento, nickname } = req.body;
 
-    if (!name || !email || !password) {
+    if (!nome || !nascimento || !nickname) {
         return res.status(400).send('Todos os campos são obrigatórios.');
     }
 
-    // Aqui, você pode adicionar lógica para salvar o usuário no banco de dados.
-    // Exemplo fictício de cadastro na sessão (não recomendado para produção, use banco de dados).
-    req.session.user = {
-        name,
-        email,
-        // Não é recomendado salvar senhas em texto claro. Aqui é apenas um exemplo.
-        password, 
-    };
+    // Consulta SQL para inserir o novo usuário no banco de dados
+    const query = 'INSERT INTO users (nome, nascimento, nickname) VALUES (?, ?, ?)';
+    db.query(query, [nome, nascimento, nickname], (err, result) => {
+        if (err) {
+            return res.status(500).send('Erro ao cadastrar o usuário');
+        }
 
-    // Redireciona para o chat após cadastro bem-sucedido
-    res.redirect('/chat.html');
+        // Salvando o usuário na sessão após cadastro
+        req.session.user = { nome, nickname, id: result.insertId };
+        res.redirect('/chat.html');
+    });
 };
