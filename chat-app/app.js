@@ -12,7 +12,6 @@ const chatController = require('./controllers/chatController');
 
 // Inicialização do servidor
 const app = express();
-const PORT = 3000;
 
 // Configuração de arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
@@ -44,5 +43,5 @@ app.get('/', (req, res) => {
 
 // Exportação da função para serverless (Vercel)
 module.exports = (req, res) => {
-    app(req, res); // Chama o app Express como função
+    app(req, res); // Chama o app Express como função serverless
 };

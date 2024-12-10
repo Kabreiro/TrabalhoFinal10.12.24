@@ -1,24 +1,17 @@
-// userController.js
-const usuarios = []; // Aqui armazenamos usuários temporariamente
+const users = [];  // Usando um array simples como exemplo
 
-exports.getCadastro = (req, res) => {
-    res.render('cadastroUsuario', { error: null });
+module.exports.getCadastro = (req, res) => {
+    res.render('cadastroUsuario', { error: null, users });
 };
 
-exports.postCadastro = (req, res) => {
-    const { nome, email, senha, nickname } = req.body;
-
-    // Verificação de dados obrigatórios
-    if (!nome || !email || !senha || !nickname) {
-        return res.render('cadastroUsuario', { error: 'Todos os campos são obrigatórios' });
+module.exports.postCadastro = (req, res) => {
+    const { nome, nascimento, nickname } = req.body;
+    
+    if (!nome || !nascimento || !nickname) {
+        return res.render('cadastroUsuario', { error: 'Todos os campos são obrigatórios!', users });
     }
 
-    // Simula o cadastro do usuário
-    usuarios.push({ nome, email, senha, nickname });
-
-    // Armazena o usuário na sessão
-    req.session.user = { nome, email };
-
-    // Redireciona para a página de bate-papo
-    return res.redirect('/chat.html');
+    users.push({ nome, nascimento, nickname });
+    req.session.user = { nome, nickname };  // Salvar na sessão
+    res.redirect('/chat.html');
 };

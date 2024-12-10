@@ -1,37 +1,16 @@
-// chatController.js
-const mensagens = []; // Lista de mensagens temporária
+const mensagens = [];
 
-exports.getChat = (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/'); // Redireciona para o cadastro caso o usuário não esteja autenticado
-    }
-
-    res.render('chat', {
-        mensagens,
-        usuario: req.session.user,
-        error: null
-    });
+module.exports.getChat = (req, res) => {
+    res.render('chat', { mensagens });
 };
 
-exports.postMensagem = (req, res) => {
+module.exports.postMensagem = (req, res) => {
     const { usuario, mensagem } = req.body;
 
-    // Validação para garantir que o campo usuário e mensagem não estejam vazios
-    if (!usuario || !mensagem) {
-        return res.render('chat', { mensagens, error: 'Usuário e mensagem são obrigatórios!' });
+    if (!mensagem || !usuario) {
+        return res.redirect('/chat.html');
     }
 
-    // Adiciona a mensagem à lista
-    mensagens.push({
-        usuario,
-        texto: mensagem,
-        data: new Date().toLocaleString(),
-    });
-
-    // Exibe novamente o chat com as mensagens
-    res.render('chat', {
-        mensagens,
-        usuario: req.session.user,
-        error: null
-    });
+    mensagens.push({ usuario, texto: mensagem, data: new Date().toISOString() });
+    res.redirect('/chat.html');
 };

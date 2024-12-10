@@ -1,10 +1,8 @@
 const session = require('express-session');
 
-const sessionMiddleware = session({
-    secret: 'chave-secreta', // Altere para uma chave segura em produção
+module.exports = session({
+    secret: 'my-secret-key',
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 30 * 60 * 1000 }, // Sessão válida por 30 minutos
+    cookie: { secure: false }  // Altere para 'true' se for usar HTTPS
 });
-
-module.exports = sessionMiddleware;
