@@ -40,3 +40,4 @@ const userController = {
             res.status(200).send('Logout bem-sucedido');
         });
     }
+}
