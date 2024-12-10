@@ -1,17 +1,10 @@
-const users = [];  // Usando um array simples como exemplo
-
 module.exports.getCadastro = (req, res) => {
-    res.render('cadastroUsuario', { error: null, users });
+    res.render('cadastroUsuario');
 };
 
 module.exports.postCadastro = (req, res) => {
-    const { nome, nascimento, nickname } = req.body;
-    
-    if (!nome || !nascimento || !nickname) {
-        return res.render('cadastroUsuario', { error: 'Todos os campos são obrigatórios!', users });
-    }
-
-    users.push({ nome, nascimento, nickname });
-    req.session.user = { nome, nickname };  // Salvar na sessão
+    // Lógica para cadastrar o usuário
+    // Exemplo fictício
+    req.session.user = { name: req.body.name };
     res.redirect('/chat.html');
 };

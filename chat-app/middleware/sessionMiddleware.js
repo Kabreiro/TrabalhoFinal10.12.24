@@ -1,8 +1,8 @@
+// Exemplo de middleware de sessão
 const session = require('express-session');
 
 module.exports = session({
-    secret: 'my-secret-key',
+    secret: 'seu_segredo_aqui',
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }  // Altere para 'true' se for usar HTTPS
+    saveUninitialized: true
 });
