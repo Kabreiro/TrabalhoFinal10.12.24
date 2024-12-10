@@ -42,7 +42,12 @@ app.get('/', (req, res) => {
     return res.redirect('/cadastroUsuario.html'); // Caso contrário, redireciona para o cadastro
 });
 
+// Iniciar o servidor Express na porta 3000 (localmente ou em plataformas compatíveis)
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Servidor rodando na porta ${PORT}`);
+    });
+}
+
 // Exportação para serverless (Vercel)
-module.exports = (req, res) => {
-    app(req, res); // Chama a função Express corretamente
-};
+module.exports = app;

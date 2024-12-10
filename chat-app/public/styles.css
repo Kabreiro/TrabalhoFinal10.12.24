@@ -1,14 +1,14 @@
-/* Exemplo de estilização básica para os formulários e botões */
-
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f4f4f9;
+    color: #333;
 }
 
 h1, h2 {
     text-align: center;
+    color: #333;
 }
 
 form {
@@ -23,23 +23,29 @@ form {
 label {
     display: block;
     margin: 10px 0 5px;
+    font-weight: bold;
+    color: #333;
 }
 
 input[type="text"], input[type="date"], textarea, select {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
 }
 
 button {
     background-color: #007bff;
     color: white;
-    padding: 10px 20px;
+    padding: 12px 20px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
@@ -50,13 +56,36 @@ button:hover {
     display: block;
     margin: 20px auto;
     background-color: #28a745;
-    padding: 10px 20px;
+    padding: 12px 20px;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 .go-chat-btn:hover {
     background-color: #218838;
+}
+
+input[type="text"]:focus, input[type="date"]:focus, textarea:focus, select:focus, button:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+@media (max-width: 600px) {
+    form {
+        padding: 15px;
+    }
+
+    input[type="text"], input[type="date"], textarea, select {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    button, .go-chat-btn {
+        width: 100%;
+    }
 }

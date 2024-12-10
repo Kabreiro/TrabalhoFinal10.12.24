@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://vercel.live;">
     <title>Bate-papo</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
@@ -11,7 +10,6 @@
     <h1>Bem-vindo ao Bate-papo!</h1>
     <form action="/postarMensagem" method="POST">
         <select name="usuario" required>
-            <!-- Lista de usuários (renderizada do servidor) -->
             <% usuarios.forEach(function(usuario) { %>
                 <option value="<%= usuario.nickname %>"><%= usuario.nickname %></option>
             <% }); %>
@@ -23,7 +21,7 @@
     <h2>Mensagens:</h2>
     <ul>
         <% mensagens.forEach(function(mensagem) { %>
-            <li><strong><%= mensagem.usuario %>:</strong> <%= mensagem.texto %> - <%= mensagem.data %></li>
+            <li><strong><%= mensagem.usuario %>:</strong> <%= mensagem.mensagem %> - <%= mensagem.timestamp %></li>
         <% }); %>
     </ul>
 </body>
