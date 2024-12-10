@@ -1,24 +1,20 @@
 const chatController = {
     // Rota para exibir o chat com usuários e mensagens
     getChat: (req, res) => {
-        // Usuários simulados - substitua por dados reais
+        // Usuários simulados - substitua por dados reais (de um banco de dados, por exemplo)
         const usuarios = [
             { nickname: 'Joao' },
             { nickname: 'Julio' },
             { nickname: 'Carol' },
-            { nickname: '' } // Exemplo de novo usuário
+            { nickname: 'Joninhas' } // Exemplo de novo usuário
         ];
 
-        // Mensagens simuladas - substitua por dados reais
+        // Mensagens simuladas - substitua por dados reais de um banco ou similar
         const mensagens = [
             { usuario: 'Joao', texto: 'Oi, pessoal!', timestamp: '2024-12-10 10:00' },
             { usuario: 'Julio', texto: 'Olá, tudo bem?', timestamp: '2024-12-10 10:02' },
             { usuario: 'Carol', texto: 'Oi, Julio!', timestamp: '2024-12-10 10:03' }
         ];
-
-        // Armazenando os usuários e mensagens no `locals` para que fiquem disponíveis entre as requisições
-        req.app.locals.usuarios = usuarios;
-        req.app.locals.mensagens = mensagens;
 
         // Renderiza a página 'chat' com os dados de usuários e mensagens
         res.render('chat', { usuarios, mensagens });
@@ -26,6 +22,7 @@ const chatController = {
 
     // Rota para processar o envio de uma nova mensagem
     postMensagem: (req, res) => {
+        // Coleta os dados do formulário
         const { usuario, mensagem } = req.body;
 
         // Verifica se ambos os campos estão presentes
@@ -40,14 +37,10 @@ const chatController = {
             timestamp: new Date().toLocaleString() // Marca de tempo no formato local
         };
 
-        // Adiciona a nova mensagem à lista existente de mensagens
-        req.app.locals.mensagens.push(newMessage);
+        // Aqui você pode adicionar a lógica para salvar a mensagem no banco de dados
 
-        // Renderiza novamente a página do chat com a nova mensagem
-        res.render('chat', {
-            usuarios: req.app.locals.usuarios,
-            mensagens: req.app.locals.mensagens
-        });
+        // Envia a nova mensagem para o frontend (usado para atualizar a interface do chat)
+        res.json({ usuario: newMessage.usuario, texto: newMessage.texto, timestamp: newMessage.timestamp });
     }
 };
 

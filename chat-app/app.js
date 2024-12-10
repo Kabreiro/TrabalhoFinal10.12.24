@@ -32,7 +32,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Rota de cadastro de usuário
 app.get('/cadastroUsuario', (req, res) => {
-    res.render('cadastro', { usuarios }); // Renderiza a página de cadastro com a lista de usuários
+    res.render('cadastroUsuario', { usuarios }); // Renderiza a página de cadastro com a lista de usuários
 });
 
 // Rota para cadastrar usuário e salvar na sessão
